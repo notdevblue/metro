@@ -17,9 +17,15 @@ public class PlayerHealth : LivingEntity
     }
 
 
-    public override void OnDamage(int damage, Vector2 hitPoint, Vector2 normal)
+    public override void OnDamage(int damage, Vector2 hitPoint, Vector2 normal, float power = 0.0f)
     {
-        base.OnDamage(damage, hitPoint, normal);
+        if(lastDamageTime + damageDelay > Time.time) return; // 연속댐 막음
+
+        lastDamageTime = Time.time;
+
+        base.OnDamage(damage, hitPoint, normal, power);
+
+        playerMove.SetHit(normal, power, recoverDelay);
     }
 
     protected override void OnDie()

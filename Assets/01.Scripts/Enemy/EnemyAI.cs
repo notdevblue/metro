@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
-    
-
     public enum State
     {
         Idle,
@@ -13,6 +11,8 @@ public class EnemyAI : MonoBehaviour
         Chase,
         Attack,
         Hit,
+        Skill, // ìŠ¤í‚¬ ì‚¬ìš© ìƒíƒœ
+        Stun,  // ìŠ¤í„´ ë‹¹í•œ ìƒíƒœ
         Dead
     }
     public State currentState = State.Idle;
@@ -22,12 +22,14 @@ public class EnemyAI : MonoBehaviour
     private WaitForSeconds ws;
     protected EnemyMove move;
     protected EnemyFOV fov;
+    protected EnemyAttack attack;
 
     private void Awake()
     {
         ws = new WaitForSeconds(judgeTime);
         fov = GetComponent<EnemyFOV>();
         move = GetComponent<EnemyMove>();
+        attack = GetComponent<EnemyAttack>();
     }
 
     private void OnEnable()
@@ -39,10 +41,8 @@ public class EnemyAI : MonoBehaviour
     {
         while (true)
         {
-            if(GameManager.Player != null) // ¾ÈÀü»§ ÄÚµå 
+            if(GameManager.Player != null)
             {
-                // ?? ¤»¤»¤» »óÅÂÃ¼Å© , »óÅÂµû¶ó ¾×¼Ç
-
                 CheckState();
 
                 Action();
@@ -53,7 +53,7 @@ public class EnemyAI : MonoBehaviour
 
     protected void CheckState()
     {
-        if(currentState == State.Hit || currentState == State.Dead)
+        if(currentState == State.Hit || currentState == State.Dead || currentState == State.Stun)
         {
             return;
         }
@@ -62,7 +62,7 @@ public class EnemyAI : MonoBehaviour
         bool isView = fov.IsViewPlayer();
         bool isAttack = fov.IsAttackPossible();
 
-        if(isAttack && isView)
+        if(isAttack && isView && isTrace)
         {
             currentState = State.Attack;
         }
@@ -83,16 +83,36 @@ public class EnemyAI : MonoBehaviour
             case State.Idle:
                 break;
             case State.Patrol:
+                if (attack != null)
+                {
+                    attack.isAttack = false;
+                }
                 move.SetMove();
                 break;
             case State.Chase:
+                if (attack != null)
+                {
+                    attack.isAttack = false;
+                }
                 move.SetChase(GameManager.Player.position);
                 break;
+
             case State.Attack:
+                move.Stop();
+                if(attack != null)
+                {
+                    attack.isAttack = true;
+                }
                 break;
+
             case State.Hit:
                 move.Stop();
+                if(attack != null)
+                {
+                    attack.isAttack = false;
+                }
                 break;
+
             case State.Dead:
                 break;           
         }
@@ -105,11 +125,35 @@ public class EnemyAI : MonoBehaviour
         StartCoroutine(Recover(stunTime));
     }
 
+    public void SetStun(float time = 0)
+    {
+        currentState = State.Stun;
+ 
+        time = time == 0 ? stunTime : time;
+
+        // ì—¬ê¸°ì— ìŠ¤í„´ ì—ë‹ˆë©”ì´ì…˜
+
+        StartCoroutine(Recover(time));
+    }
+
     private IEnumerator Recover( float time)
     {
         yield return new WaitForSeconds(time);
 
         currentState = State.Patrol;
+    }
+
+    public void SetDead()
+    {
+        currentState = State.Dead;
+        // ê³µê²© ì¤‘ì§€ ì½”ë“œ
+
+        if(attack != null)
+        {
+            attack.isAttack = false;
+        }
+
+        move.Stop();
     }
 }
      

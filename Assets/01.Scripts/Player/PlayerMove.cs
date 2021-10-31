@@ -76,7 +76,7 @@ public class PlayerMove : MonoBehaviour
     {
         rigid.gravityScale = 1;
         rigid.velocity = Vector2.zero;
-        Vector2 dir = -normal * power * new Vector2(0, 4);
+        Vector2 dir = -normal * power + new Vector2(0, 4);
         rigid.AddForce(dir, ForceMode2D.Impulse);
         StartCoroutine(RecoverProcess(delay));
     }

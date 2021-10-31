@@ -7,7 +7,7 @@ using UnityEngine;
 public abstract class EnemyMove : MonoBehaviour
 {
     protected SpriteRenderer spriteRenderer;
-    public bool factingRight = true; // ¿À¸¥ÂÊ º¸°í ÀÖ´Â°¨
+    public bool factingRight = true; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Â°ï¿½
 
     public float judgeDistance = 0.1f;
    // public float patrolDistance = 1.5f;
@@ -30,18 +30,23 @@ public abstract class EnemyMove : MonoBehaviour
 
     public Vector2 GetFront()
     {
+        // if(spriteRenderer == null)
+        // {
+        //     return transform.right;
+        // }
         if (factingRight)
         {
-            return spriteRenderer.flipX ? transform.right * -1 : transform.right;
+            return transform.localScale.x > 0 ? transform.right : transform.right * -1;
         }
         else
         {
-            return spriteRenderer.flipX ? transform.right : transform.right * -1;
+            return transform.localScale.x > 0 ? transform.right * -1 : transform.right;
         }
     }
 
     public virtual void Stop()
     {
+        rigid.velocity = Vector2.zero;
         moveSet = false;
     }
 
@@ -62,7 +67,9 @@ public abstract class EnemyMove : MonoBehaviour
     
     public void Flip()
     {
-        spriteRenderer.flipX = !spriteRenderer.flipX;
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
     }
 
     

@@ -29,14 +29,14 @@ public class GroundEnemyMove : EnemyMove
         {
             if (isChase)
             {
-                moveDir = (destination - (Vector2)transform.position).normalized; // zÃà ³¯¸®·Á°í º¯È¯ 
+                moveDir = (destination - (Vector2)transform.position).normalized; // zï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ 
             }
 
             rigid.velocity = new Vector2(moveDir.x * currentSpeed * GameManager.TimeScale, rigid.velocity.y);
 
             if (factingRight)
             {
-                if (moveDir.x > 0 && spriteRenderer.flipX || moveDir.x  < 0 && !spriteRenderer.flipX)
+                if (moveDir.x > 0 && transform.localScale.x < 0 || moveDir.x < 0 && transform.localScale.x > 0)
                 {
                     Flip();
                 }
@@ -44,7 +44,7 @@ public class GroundEnemyMove : EnemyMove
             }
             else
             {
-                if (moveDir.x < 0 && spriteRenderer.flipX || moveDir.x > 0 && !spriteRenderer.flipX)
+                if (moveDir.x < 0 && transform.localScale.x < 0 || moveDir.x > 0 && transform.localScale.x > 0)
                 {
                     Flip();
                 }
@@ -79,5 +79,5 @@ public class GroundEnemyMove : EnemyMove
     }
 
 
-    // ¤¡¤¡ 
+    // ï¿½ï¿½ï¿½ï¿½ 
 }
