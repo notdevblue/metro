@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SlimeHealth : LivingEntity
 {
-    public int coinCoint = 3; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public int coinCoint = 3; // ÄÚÀÎ ¶³±¸´Â °¹¼ö
 
     BoxCollider2D boxCollider2D;
     Rigidbody2D rigid;
@@ -30,14 +30,15 @@ public class SlimeHealth : LivingEntity
         base.Start();
     }
 
-    public override void OnDamage(int damage, Vector2 hitPoint, Vector2 normal, float power = 1.0f)
+    public override void OnDamage(int damage, Vector2 hitPoint, Vector2 normal, float power = 1f)
     {
         rigid.velocity = Vector2.zero;
         rigid.AddForce(normal * -damage * 2 + new Vector2(0,3f) , ForceMode2D.Impulse);
         slimeAnim.SetHit();
-        base.OnDamage(damage, hitPoint, normal, power);
+        base.OnDamage(damage, hitPoint, normal);
 
-        ai.SetHit();
+        ai.SetHit(); // ÀÏ½ÃÀûÀ¸·Î ai Á¤Áö ¹× ÀÏÁ¤½Ã°£ÈÄ ´Ù½Ã µ¹¾Æ¿È 
+
     }
 
     protected override void OnDie()

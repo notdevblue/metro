@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
     public RectTransform tooltipTextTrm;
-    public Text toolTipText;
+    public Text tooltipText;
+
+    public BossHPBar bossHPBar;
+
+    public TMP_Text coinText;
 
     private CanvasGroup tooltipCG;
     private Vector3 initPosition;
@@ -17,8 +22,9 @@ public class UIManager : MonoBehaviour
     {
         if(instance != null)
         {
-            Debug.LogError("Warn > UIManager are running more than one in same scene");
+            Debug.LogError("∞Ê∞Ì : ¥Ÿºˆ¿« UI Manager∞° Ω««‡¡ﬂ¿‘¥œ¥Ÿ.");
         }
+        
         instance = this;
 
         tooltipCG = tooltipTextTrm.GetComponent<CanvasGroup>();
@@ -26,34 +32,54 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        initPosition = tooltipTextTrm.localPosition;   
+        //√ ±‚¿« ∆˜¡ˆº«¿ª ¿˙¿Â«ÿµŒ∞Ì
+        initPosition = tooltipTextTrm.localPosition;
     }
 
-    static public void ShowToolTip(string text)
+    public static void SetBossHPBar(float value)
     {
-        instance.toolTipText.text = text;
+        instance.bossHPBar.SetHP(value);
+    }
+
+    public static void ShowBossHPBar()
+    {
+        RectTransform bar = instance.bossHPBar.GetComponent<RectTransform>();
+        if(bar != null)
+            bar.DOAnchorPosY(-20, 1f);
+    }
+
+    public static void HideBossHPBar()
+    {
+        RectTransform bar = instance.bossHPBar.GetComponent<RectTransform>();
+        if (bar != null)
+            bar.DOAnchorPosY(bar.rect.height, 1f);
+    }
+
+    public static void ShowToolTip(string text)
+    {
+        instance.tooltipText.text = text;
 
         Sequence seq = DOTween.Sequence();
         CanvasGroup cg = instance.tooltipCG;
-
         seq.Append(DOTween.To(() => cg.alpha, value => cg.alpha = value, 1, 0.8f));
         float y = instance.initPosition.y;
-
-        seq.Join(instance.tooltipTextTrm.DOLocalMoveY(y + 150.0f, 1.0f));
+        seq.Join(instance.tooltipTextTrm.DOLocalMoveY(y + 120f, 0.5f));
     }
 
-    static public void CloseToolTip()
+    public static void CloseTooltip()
     {
-        DOTween.Clear(); // Î™®Îì† Tween ÏùÑ Ï¢ÖÎ£åÏãúÌÇ§Í≥†
-
-        Sequence seq = DOTween.Sequence();
+        DOTween.Clear(); //∏µÁ ∆Æ¿©¿ª ¡æ∑·Ω√≈∞∞Ì 
+        //Ω√ƒˆΩ∫∏¶ ∏∏µÈæÓº≠ ≈ı∏Ìµµ∏¶ ¥ŸΩ√ ≈ı∏Ì«œ∞‘ πŸ≤Ÿ∞Ì initPosition¿∏∑Œ ∫∏≥ª∏È µ≈
         CanvasGroup cg = instance.tooltipCG;
-
-        seq.Append(DOTween.To(() => cg.alpha, value => cg.alpha = value, 0.0f, 0.8f));
-
-        seq.Join(instance.tooltipTextTrm.DOLocalMoveY(instance.initPosition.y, 1.0f));
+        Sequence seq = DOTween.Sequence();
+        seq.Append(DOTween.To(() => cg.alpha, value => cg.alpha = value, 0, 0.8f));
+        seq.Join(instance.tooltipTextTrm.DOLocalMoveY(instance.initPosition.y, 0.5f));
     }
 
 
+    public static void SetCoinText(int count)
+    {
+        instance.coinText.text = count.ToString();
+    }
 
 }

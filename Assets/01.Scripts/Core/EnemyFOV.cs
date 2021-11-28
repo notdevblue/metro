@@ -40,8 +40,8 @@ public class EnemyFOV : MonoBehaviour
     {
         bool isTrace = false;
         Collider2D col = Physics2D.OverlapCircle(transform.position, viewAngle, 1 << playerLayer);
-
-        if(col != null)
+        
+        if(col != null && enemyMove != null)
         {
             // z축 필요없으니 벡터 2로 변환시킴
             Vector2 dir = GameManager.Player.position - transform.position;
@@ -50,9 +50,7 @@ public class EnemyFOV : MonoBehaviour
             {
 
                 isTrace = true;
-
             }
-
         }
        
         return isTrace;

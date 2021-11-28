@@ -6,7 +6,7 @@ public class PlayerHealth : LivingEntity
 {
     public float damageDelay;
     public float recoverDelay = 0.5f;
-
+    
     private PlayerMove playerMove;
     private float lastDamageTime;
 
@@ -16,13 +16,13 @@ public class PlayerHealth : LivingEntity
         playerMove = GetComponent<PlayerMove>();
     }
 
-
-    public override void OnDamage(int damage, Vector2 hitPoint, Vector2 normal, float power = 0.0f)
+    public override void OnDamage(int damage, Vector2 hitPoint, Vector2 normal, float power)
     {
-        if(lastDamageTime + damageDelay > Time.time) return; // ì—°ì†ëŒ ë§‰ìŒ
+        if (lastDamageTime + damageDelay > Time.time) return; //¿¬¼Ó µ¥¹ÌÁö´Â ¸·¾ÆÁÖ°í
 
         lastDamageTime = Time.time;
 
+        //³ªÁß¿¡ ¿©±â¼­ µ¥¹ÌÁö Ã³¸® ·ÎÁ÷À» ¸¸µé¾îº¾½Ã´Ù.
         base.OnDamage(damage, hitPoint, normal, power);
 
         playerMove.SetHit(normal, power, recoverDelay);
@@ -30,12 +30,15 @@ public class PlayerHealth : LivingEntity
 
     protected override void OnDie()
     {
-        
+        throw new System.NotImplementedException();
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        Item item = other.transform.GetComponent<Item>();
-        item?.Use(gameObject);
+        Item item = collision.gameObject.GetComponent<Item>();
+        if(item)
+        {
+            item.Use(gameObject); //ÇÃ·¹ÀÌ¾î¸¦ º¸³»ÁØ´Ù.
+        }
     }
 }

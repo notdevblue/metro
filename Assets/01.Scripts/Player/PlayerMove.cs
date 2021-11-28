@@ -24,14 +24,14 @@ public class PlayerMove : MonoBehaviour
     [Header("대시 관련")]
     public GameObject afterImagePrefab;
     public Transform afterImageTrm;
-    public bool canDash = false; // 대시가 가능한가?
+    public bool canDash = false;  //대시가 가능한가?
     public float dashPower = 10f;
     public float dashTime = 0.2f;
-    public float dashCooltime = 5.0f;
+    public float dashCooltime = 5f; //대시는 5초에 한번만
 
-    private float curDashCooltime = 0.0f;
-    private bool isDash = false; // 현재 대시중인가?
-    private bool isHit = false; // 피격중인가?
+    private float currentDashCooltime = 0f; 
+    private bool isDash = false; //현재 대시중인가?
+    private bool isHit = false;//피격중인가?
 
     void Awake()
     {
@@ -55,19 +55,18 @@ public class PlayerMove : MonoBehaviour
             isJump = true;
         }
         
-        if(input.isDash && !isDash && canDash && curDashCooltime <= 0)
+        if(input.isDash && !isDash && canDash && currentDashCooltime <= 0)
         {
             isDash = true;
-            curDashCooltime = dashCooltime;
-            Debug.Log("대시");
+            currentDashCooltime = dashCooltime;
             StartCoroutine(Dash());
         }
 
-        // 대쉬 쿨타임을 줄여준다.
-        if(curDashCooltime > 0)
+        //대시 쿨타임을 줄여준다
+        if(currentDashCooltime > 0)
         {
-            curDashCooltime -= Time.deltaTime;
-            if(curDashCooltime <= 0) curDashCooltime = 0;
+            currentDashCooltime -= Time.deltaTime;
+            if (currentDashCooltime <= 0) currentDashCooltime = 0;
         }
     }
 
@@ -77,7 +76,9 @@ public class PlayerMove : MonoBehaviour
         rigid.gravityScale = 1;
         rigid.velocity = Vector2.zero;
         Vector2 dir = -normal * power + new Vector2(0, 4);
+        
         rigid.AddForce(dir, ForceMode2D.Impulse);
+        playerAnimation.SetHit(true);
         StartCoroutine(RecoverProcess(delay));
     }
 
@@ -86,6 +87,7 @@ public class PlayerMove : MonoBehaviour
         isHit = true;
         yield return new WaitForSeconds(time);
         isHit = false;
+        playerAnimation.SetHit(false);
     }
 
     IEnumerator Dash()
@@ -121,7 +123,7 @@ public class PlayerMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(isDash) return; //대시중에는 기본 연산은 하지 않는다.
+        if(isDash || isHit) return; //대시중에는 기본 연산은 하지 않는다.
 
         float xMove = input.xMove;
         if (xMove > 0)

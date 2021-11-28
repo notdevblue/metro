@@ -6,11 +6,14 @@ public class GroundEnemyMove : EnemyMove
 {
     public LayerMask whatIsGround;
     private Vector2 moveDir;
-   
+
+    private Vector3 spriteSize;
 
     private void Start()
     {
         moveDir = transform.right;
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        spriteSize = sr.bounds.size;
     }
 
     public override void SetMove()
@@ -29,18 +32,17 @@ public class GroundEnemyMove : EnemyMove
         {
             if (isChase)
             {
-                moveDir = (destination - (Vector2)transform.position).normalized; // zï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ 
+                moveDir = (destination - (Vector2)transform.position).normalized; // zÃà ³¯¸®·Á°í º¯È¯ 
             }
 
             rigid.velocity = new Vector2(moveDir.x * currentSpeed * GameManager.TimeScale, rigid.velocity.y);
 
-            if (factingRight)
+            if (facingRight)
             {
-                if (moveDir.x > 0 && transform.localScale.x < 0 || moveDir.x < 0 && transform.localScale.x > 0)
+                if (moveDir.x > 0 && transform.localScale.x < 0 || moveDir.x  < 0 && transform.localScale.x > 0)
                 {
                     Flip();
                 }
-             
             }
             else
             {
@@ -48,7 +50,6 @@ public class GroundEnemyMove : EnemyMove
                 {
                     Flip();
                 }
-               
             }
 
             if (!CheckGround())
@@ -63,8 +64,6 @@ public class GroundEnemyMove : EnemyMove
                     moveDir *= -1;
                 }
                 
-                  
-                
             }
         }
     }
@@ -72,12 +71,14 @@ public class GroundEnemyMove : EnemyMove
     private bool CheckGround()
     {   
         Vector2 pos = transform.position;
-        Vector2 frontPosition = new Vector2(pos.x + moveDir.x * 0.35f, pos.y - 0.5f);
+        Vector2 frontDownPosition = new Vector2(pos.x + moveDir.x * 0.35f, pos.y - spriteSize.y / 2 );
+        Vector2 frontPosition = new Vector2(pos.x + moveDir.x * (spriteSize.x / 2 + 0.35f), pos.y);
 
-        return Physics2D.OverlapCircle(frontPosition, 0.2f, whatIsGround);
+        return Physics2D.OverlapCircle(frontDownPosition, 0.2f, whatIsGround)
+            && !Physics2D.OverlapCircle(frontPosition, 0.2f, whatIsGround);
 
     }
 
 
-    // ï¿½ï¿½ï¿½ï¿½ 
+    // ¤¡¤¡ 
 }

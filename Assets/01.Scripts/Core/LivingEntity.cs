@@ -7,7 +7,6 @@ public abstract class LivingEntity : MonoBehaviour, IDamageable
 {
     public int maxHP;
     protected int currentHP;
-
     public Color hitColor;
 
     protected virtual void Start()
@@ -15,16 +14,16 @@ public abstract class LivingEntity : MonoBehaviour, IDamageable
         currentHP = maxHP;
     }
 
-    public virtual void OnDamage(int damage, Vector2 hitPoint, Vector2 normal, float power = 0.0f)
+    public virtual void OnDamage(int damage, Vector2 hitPoint, Vector2 normal, float power = 0)
     {
-        // ÌîºÍ≤© ÌååÌã∞ÌÅ¥
+        // ««∞› ∆ƒ∆º≈¨¿∫ ø©±‚º≠ ¿Áª˝ 
         BloodParticle hitParticle = PoolManager.GetItem<BloodParticle>();
         hitParticle.SetParticleColor(hitColor);
         hitParticle.SetRotation(normal);
         hitParticle.Play(hitPoint);
 
         currentHP -= damage;
-        if (currentHP < 0)
+        if (currentHP <= 0)
         {
             OnDie();
         }

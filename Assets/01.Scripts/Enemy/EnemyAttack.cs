@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-abstract public class EnemyAttack : MonoBehaviour
+public abstract class EnemyAttack : MonoBehaviour
 {
-    public float attackDelay;
+    public float attackDealy;
+
     protected float lastAttackTime = 0;
     public bool isAttack = false;
 
@@ -14,12 +15,12 @@ abstract public class EnemyAttack : MonoBehaviour
     }
 
     public abstract void Attack();
-
-    private void Update()
+    
+    protected virtual void Update()
     {
-        if (isAttack)
+        if(isAttack)
         {
-            if (lastAttackTime + attackDelay <= Time.time)
+            if(lastAttackTime + attackDealy <= Time.time) //딜레이가 끝나 다시 공격가능하다면
             {
                 lastAttackTime = Time.time;
                 Attack();
@@ -27,6 +28,8 @@ abstract public class EnemyAttack : MonoBehaviour
         }
     }
 
-    
-
+    public virtual void OnStartAttack()
+    {
+        //Do nothing;
+    }
 }

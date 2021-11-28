@@ -14,6 +14,8 @@ public class PlayerAnimation : MonoBehaviour
     private readonly int hashIsJumping = Animator.StringToHash("isJumping");
     private readonly int hashDoubleJump = Animator.StringToHash("doubleJump");
     private readonly int hashAttack = Animator.StringToHash("attack");
+    private readonly int hashIsHit = Animator.StringToHash("isHit");
+    private readonly int hashHit = Animator.StringToHash("hit");
 
     private bool jumping = false;
 
@@ -58,10 +60,13 @@ public class PlayerAnimation : MonoBehaviour
     {
         anim.SetTrigger(hashAttack);
     }
-}
 
-// 정렬과 탐색
-// 스택, 큐, 트리(이진), B+Tree, 레드블랙트리, 
-// abcde =>  95 + 96 + 97 + 98 + 99 
-//배열에 넣자
-// 100 
+    public void SetHit(bool value)
+    {
+        anim.SetBool(hashIsHit, value);
+        if (value)
+        {
+            anim.SetTrigger(hashHit);
+        }
+    }
+}

@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
-    const string PLAYER = "Player";
+    public float distance = 3f;
+    public float direction = -1f;
+    public float speed = 2f;
 
-    public float distance = 3.0f;
-    public float direction = -1.0f;
-    public float speed = 2.0f;
+    private float movedDistance = 0;
 
-    private float movedDistance = 0.0f;
-
+    // Update is called once per frame
     void Update()
     {
         float move = speed * direction * Time.deltaTime * GameManager.TimeScale;
@@ -25,19 +24,19 @@ public class MovingPlatform : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(other.transform.CompareTag(PLAYER))
+        if(collision.gameObject.CompareTag("Player"))
         {
-            other.transform.SetParent(transform);
+            collision.transform.SetParent(transform);
         }
     }
 
-    private void OnCollisionExit2D(Collision2D other)
+    private void OnCollisionExit2D(Collision2D collision)
     {
-        if (other.transform.CompareTag(PLAYER))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            other.transform.SetParent(null);
+            collision.transform.SetParent(null);
         }
     }
 }

@@ -7,12 +7,10 @@ public class GoblinAnimation : MonoBehaviour
     private Rigidbody2D rigid;
     private Animator animator;
 
-    private readonly int hashSpeed  = Animator.StringToHash("speed");
+    private readonly int hashSpeed = Animator.StringToHash("speed");
     private readonly int hashAttack = Animator.StringToHash("attack");
-    private readonly int hashDie    = Animator.StringToHash("die");
-    private readonly int hashDead   = Animator.StringToHash("dead");
-
-
+    private readonly int hashDie = Animator.StringToHash("die");
+    private readonly int hashDead = Animator.StringToHash("dead");
 
     private void Awake()
     {
@@ -36,7 +34,6 @@ public class GoblinAnimation : MonoBehaviour
         animator.SetBool(hashDead, true);
         animator.SetTrigger(hashDie);
     }
-
-
+    
 
 }

@@ -4,29 +4,30 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using DG.Tweening;
+using System;
 
 public class DialogPanel : MonoBehaviour
 {
     private List<TextVO> list;
-    private RectTransform panel; //ï¿½ï¿½È­ Ã¢ ï¿½Ð³ï¿½
+    private RectTransform panel; //´ëÈ­ Ã¢ ÆÐ³Î
 
-    public TMP_Text dialogText; // ï¿½Ø½ï¿½Æ®ï¿½Å½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾ï¿½Î±ï¿½ Ã¢
-    private WaitForSeconds shortWs = new WaitForSeconds(0.2f); //ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½
+    public TMP_Text dialogText; // ÅØ½ºÆ®¸Å½Ã ÇÁ·ÎÀÇ ´ÙÀÌ¾ó·Î±× Ã¢
+    private WaitForSeconds shortWs = new WaitForSeconds(0.2f); //±ÛÀÚ°¡ ÂïÈ÷´Â ¼Óµµ
 
-    private bool clickToNext = false; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ï¿½ï¿½ ï¿½Ñ±ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ï¿½Â°ï¿½?
-    private bool isOpen = false; //ï¿½ï¿½È­Ã¢ï¿½ï¿½ ï¿½ï¿½ï¿½È´Â°ï¿½?
+    private bool clickToNext = false; // ´ÙÀ½ ´ëÈ­·Î ³Ñ±â±â À§ÇÑ Å¬¸¯ÀÌ ³ªÅ¸³µ´Â°¡?
+    private bool isOpen = false; //´ëÈ­Ã¢ÀÌ ¿­·È´Â°¡?
 
-    public GameObject nextIcon; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ±ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-    public GameObject typeEffectParticle; //Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½Æ¼Å¬
-    public Image profileImage; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-    public AudioClip typeClip; //Å¸ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ò¸ï¿½
+    public GameObject nextIcon; //´ÙÀ½À¸·Î ³Ñ±â´Â ¾ÆÀÌÄÜ
+    public GameObject typeEffectParticle; //Å¸ÀÌÇÎ ÀÌÆåÆ® ÆÄÆ¼Å¬
+    public Image profileImage; //ÇÁ·ÎÇÊ
+    public AudioClip typeClip; //Å¸ÀÌÇÎÇÏ´Â ¼Ò¸®
 
-    private int currentIndex; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ ï¿½Îµï¿½ï¿½ï¿½
-    private RectTransform textTransform; //ï¿½Ø½ï¿½Æ® Ã¢ï¿½ï¿½ Å©ï¿½ï¿½
+    private int currentIndex; //ÇöÀç ´ëÈ­ ÀÎµ¦½º
+    private RectTransform textTransform; //ÅØ½ºÆ® Ã¢ÀÇ Å©±â
 
     private Dictionary<int, Sprite> imageDictionary = new Dictionary<int, Sprite>();
 
-    private System.Action endDialogCallback = null;
+    private Action endDialogCallback = null;
 
     private void Awake()
     {
@@ -34,7 +35,7 @@ public class DialogPanel : MonoBehaviour
         textTransform = dialogText.GetComponent<RectTransform>();
     }
 
-    public void StartDialog(List<TextVO> list, System.Action callback = null)
+    public void StartDialog(List<TextVO> list, Action callback = null)
     {
         endDialogCallback = callback;
         this.list = list;
@@ -48,8 +49,6 @@ public class DialogPanel : MonoBehaviour
 
         panel.DOScale(new Vector3(1, 1, 1), 0.8f).OnComplete(() =>
         {
-            
-
             TypeIt(list[currentIndex]);
             isOpen = true;
         });
@@ -58,7 +57,7 @@ public class DialogPanel : MonoBehaviour
     public void TypeIt(TextVO vo)
     {
         int idx = vo.icon;
-        //ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½Å³Ê¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ´Ù°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½.
+        //ÀÌ¹ÌÁö µñ¼Å³Ê¸®¿¡¼­ ÀÌ¹ÌÁö¸¦ Ã£¾Æ´Ù°¡ º¸¿©ÁÖ´Â ·ÎÁ÷À» ¸¸µé¾î¾ß ÇØ.
 
         if (!imageDictionary.ContainsKey(idx))
         {
@@ -76,10 +75,10 @@ public class DialogPanel : MonoBehaviour
 
     IEnumerator Typing()
     {
-        dialogText.ForceMeshUpdate(); //ï¿½Ì°ï¿½ ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+        dialogText.ForceMeshUpdate(); //ÀÌ°Ô ÅØ½ºÆ® Á¤º¸
         dialogText.maxVisibleCharacters = 0;
-        // 20ï¿½ï¿½ï¿½ï¿½
-        int totalVisibleChar = dialogText.textInfo.characterCount; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ã¼
+        // 20±ÛÀÚ
+        int totalVisibleChar = dialogText.textInfo.characterCount; //¾²¿©Áø ÅØ½ºÆ®ÀÇ ±ÛÀÚ ¼ö ÀüÃ¼
         for(int i = 1; i <= totalVisibleChar; i++)
         {
             dialogText.maxVisibleCharacters = i;
@@ -87,7 +86,7 @@ public class DialogPanel : MonoBehaviour
             //Vector3 pos = dialogText.textInfo.characterInfo[i - 1].bottomRight;
             //Vector3 tPos = textTransform.TransformPoint(pos);
 
-            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+            //»ç¿îµåÀç»ý 
 
             if (clickToNext)
             {
@@ -96,7 +95,7 @@ public class DialogPanel : MonoBehaviour
             }
             yield return shortWs;
         }
-        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô´Ù¸ï¿½ ï¿½Ñ°ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È°ï¿½
+        //¿©±â±îÁö ¿Ô´Ù¸é ÇÑ°³ÀÇ ÅØ½ºÆ®°¡ Àç»ýµÈ°Å
         currentIndex++;
         clickToNext = true;
         nextIcon.SetActive(true);
@@ -106,18 +105,20 @@ public class DialogPanel : MonoBehaviour
     {
         if (!isOpen) return;
 
-        //ï¿½Ø½ï¿½Æ® ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì¿¡ ï¿½Ø´ï¿½
+        //ÅØ½ºÆ® ÇÏ³ª°¡ ´Ù Àç»ýµÇ¾ú°í ½ºÆäÀÌ½º Å°°¡ ´­¸°°æ¿ì¿¡ ÇØ´ç
         if(Input.GetButtonDown("Jump") && clickToNext)
         {
             if(currentIndex >= list.Count)
             {
                 panel.DOScale(new Vector3(0, 0, 1), 0.8f).OnComplete(() =>
                  {
-                     // ï¿½ï¿½ï¿½Ó¸Å´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+                     // °ÔÀÓ¸Å´ÏÀúÀÇ ½Ã°£ Á¶Àý±â´ÉÀ» ¸¸µé¾î¾ß µÅ
                      GameManager.TimeScale = 1f;
                      isOpen = false;
-                     endDialogCallback?.Invoke();
-                     endDialogCallback = null;
+                     if(endDialogCallback != null)
+                     {
+                         endDialogCallback();
+                     }
                  });
             }else
             {

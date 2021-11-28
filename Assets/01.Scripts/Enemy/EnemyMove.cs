@@ -7,7 +7,7 @@ using UnityEngine;
 public abstract class EnemyMove : MonoBehaviour
 {
     protected SpriteRenderer spriteRenderer;
-    public bool factingRight = true; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Â°ï¿½
+    public bool facingRight = true; // ¿À¸¥ÂÊ º¸°í ÀÖ´Â°¨
 
     public float judgeDistance = 0.1f;
    // public float patrolDistance = 1.5f;
@@ -22,6 +22,7 @@ public abstract class EnemyMove : MonoBehaviour
     protected bool moveSet = false;
     protected Rigidbody2D rigid;
 
+
     protected virtual void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -30,11 +31,11 @@ public abstract class EnemyMove : MonoBehaviour
 
     public Vector2 GetFront()
     {
-        // if(spriteRenderer == null)
-        // {
-        //     return transform.right;
-        // }
-        if (factingRight)
+        //if(spriteRenderer == null)
+        //{
+        //    return transform.right;
+        //}
+        if (facingRight)
         {
             return transform.localScale.x > 0 ? transform.right : transform.right * -1;
         }

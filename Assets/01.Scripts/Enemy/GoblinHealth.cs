@@ -5,7 +5,7 @@ using UnityEngine;
 public class GoblinHealth : LivingEntity
 {
     public bool isSuperArmor = false;
-    public int cointCount = 5;
+    public int coinCount = 5;
 
     BoxCollider2D boxCol;
     Rigidbody2D rigid;
@@ -15,9 +15,9 @@ public class GoblinHealth : LivingEntity
     private void Awake()
     {
         boxCol = GetComponent<BoxCollider2D>();
-        rigid  = GetComponent<Rigidbody2D>();
-        anim   = GetComponent<GoblinAnimation>();
-        ai     = GetComponent<EnemyAI>();
+        rigid = GetComponent<Rigidbody2D>();
+        anim = GetComponent<GoblinAnimation>();
+        ai = GetComponent<EnemyAI>();
     }
 
     private void OnEnable()
@@ -26,19 +26,16 @@ public class GoblinHealth : LivingEntity
         rigid.gravityScale = 1;
     }
 
-    public override void OnDamage(int damage, Vector2 hitPoint, Vector2 normal, float power = 1.0f)
+    public override void OnDamage(int damage, Vector2 hitPoint, Vector2 normal, float power = 1f)
     {
-        if(!isSuperArmor)
+        if (!isSuperArmor)
         {
             rigid.AddForce(normal * -damage * 2, ForceMode2D.Impulse);
             ai.SetHit();
         }
-
-        // ÌîºÍ≤© ÏóêÎãàÎ©îÏù¥ÏÖòÏùÄ Ïó¨Í∏∞Ïóê
-
-        base.OnDamage(damage, hitPoint, normal, power);
+        // ««∞›æ÷¥œ∏ﬁ¿Ãº«¿ª ∏∏µÈ∞Ì ΩÕ¥Ÿ∏È ø©±‚¥Ÿ ≥÷æÓæﬂ «ÿ
+        base.OnDamage(damage, hitPoint, normal);
     }
-
 
     protected override void OnDie()
     {
@@ -47,16 +44,16 @@ public class GoblinHealth : LivingEntity
         anim.SetDead();
         boxCol.enabled = false;
 
-        ai.SetDead();
+        ai.SetDead(); //∏∏µÈ≤®æﬂ
 
-        CoinManager.PopCoin(transform.position, cointCount);
+        CoinManager.PopCoin(transform.position, coinCount);
 
-        Invoke(nameof(DeadProcess), 1.0f);
+        Invoke("DeadProcess", 1f);
     }
-
 
     private void DeadProcess()
     {
         gameObject.SetActive(false);
     }
+
 }

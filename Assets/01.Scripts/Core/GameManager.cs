@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,7 +25,7 @@ public class GameManager : MonoBehaviour
     public Transform player;
     public GameObject bloodParticlePrefab;
 
-    public DialogPanel dialogPanel; //ï¿½ï¿½ï¿½Ì¾ï¿½Î±ï¿½ ï¿½Ð³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ®
+    public DialogPanel dialogPanel; //´ÙÀÌ¾ó·Î±× ÆÐ³Î Á¦¾î¿ë ½ºÅ©¸³Æ®
     private Dictionary<int, List<TextVO>> dialogTextDictionary = new Dictionary<int, List<TextVO>>();
     
     private float timeScale = 1f;
@@ -50,14 +51,21 @@ public class GameManager : MonoBehaviour
     }
 
     private int coinCount = 0;
-    static public void AddCoin(int value)
+
+    public static void AddCoin(int value)
     {
+        //¿©±â¼­´Â ´Ü¼øÈ÷ ÄÚÀÎÀ» Áõ°¡½ÃÅ°±â¸¸ ÇÏÁö¸¸ ³ªÁß¿¡ ¿©±â¿¡ UI¸¦ °»½ÅÇÏ´Â ·ÎÁ÷ÀÌ µé¾î°¡¾ß ÇÑ´Ù.
         instance.coinCount += value;
+        UIManager.SetCoinText(instance.coinCount);
     }
-    static public void RemoveCoin(int value)
+
+    public static void RemoveCoin(int value)
     {
-        instance.coinCount = Mathf.Clamp(instance.coinCount - value, 0, instance.coinCount + 1);
+        //´ç¿¬È÷ ¿©±â¼­µµ UI°»½Å
+        instance.coinCount = Mathf.Clamp(instance.coinCount - value, 0, instance.coinCount);
+        UIManager.SetCoinText(instance.coinCount);
     }
+
 
     private void Awake()
     {
@@ -80,19 +88,18 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         PoolManager.CreatePool<BloodParticle>(bloodParticlePrefab, transform, 10);
-        
-        //ï¿½Ì°ï¿½ ï¿½×½ï¿½Æ® ï¿½Úµï¿½
-        //dialogPanel.StartDialog(dialogTextDictionary[0]);
+
+        UIManager.SetCoinText(coinCount);
     }
 
-    public static void ShowDialog(int index, System.Action callback = null)
+    public static void ShowDialog(int index, Action callback = null)
     {
         if(index >= instance.dialogTextDictionary.Count)
         {
             return;
         }
 
-        //ï¿½Ø´ï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½.
+        //ÇØ´ç ÀÎµ¦½º ÀÇ ´ëÈ­¸¦ Àç»ýÇÏµµ·Ï ÇÔ.
         instance.dialogPanel.StartDialog(instance.dialogTextDictionary[index], callback);
     }
 }

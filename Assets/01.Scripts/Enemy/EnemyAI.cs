@@ -11,13 +11,15 @@ public class EnemyAI : MonoBehaviour
         Chase,
         Attack,
         Hit,
-        Skill, // ìŠ¤í‚¬ ì‚¬ìš© ìƒíƒœ
-        Stun,  // ìŠ¤í„´ ë‹¹í•œ ìƒíƒœ
+        Skill,  //½ºÅ³ »ç¿ë »óÅÂ
+        Stun,  //½ºÅÏ´çÇÑ »óÅÂ
         Dead
     }
     public State currentState = State.Idle;
     public float judgeTime = 0.2f;
     public float stunTime = 0.5f;
+
+    public StatusAnimation _status;
 
     private WaitForSeconds ws;
     protected EnemyMove move;
@@ -29,7 +31,8 @@ public class EnemyAI : MonoBehaviour
         ws = new WaitForSeconds(judgeTime);
         fov = GetComponent<EnemyFOV>();
         move = GetComponent<EnemyMove>();
-        attack = GetComponent<EnemyAttack>();
+        attack = GetComponent<EnemyAttack>(); //ÀÌ·¸°Ô ÇÏ¸é ÀÚ±âÇÑÅ× ¸Â´Â Attack ÀÌ °¡Á®¿ÍÁ®
+        _status = GetComponentInChildren<StatusAnimation>(); //ÀÚ½Ä¿¡ ´Ş·ÁÀÖ´Â »óÅÂ 
     }
 
     private void OnEnable()
@@ -41,8 +44,10 @@ public class EnemyAI : MonoBehaviour
     {
         while (true)
         {
-            if(GameManager.Player != null)
+            if(GameManager.Player != null) // ¾ÈÀü»§ ÄÚµå 
             {
+                // ?? ¤»¤»¤» »óÅÂÃ¼Å© , »óÅÂµû¶ó ¾×¼Ç
+
                 CheckState();
 
                 Action();
@@ -51,7 +56,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    protected void CheckState()
+    protected virtual void CheckState()
     {
         if(currentState == State.Hit || currentState == State.Dead || currentState == State.Stun)
         {
@@ -84,35 +89,24 @@ public class EnemyAI : MonoBehaviour
                 break;
             case State.Patrol:
                 if (attack != null)
-                {
                     attack.isAttack = false;
-                }
                 move.SetMove();
                 break;
             case State.Chase:
                 if (attack != null)
-                {
                     attack.isAttack = false;
-                }
                 move.SetChase(GameManager.Player.position);
                 break;
-
             case State.Attack:
                 move.Stop();
-                if(attack != null)
-                {
+                if (attack != null)
                     attack.isAttack = true;
-                }
                 break;
-
             case State.Hit:
                 move.Stop();
-                if(attack != null)
-                {
+                if (attack != null)
                     attack.isAttack = false;
-                }
                 break;
-
             case State.Dead:
                 break;           
         }
@@ -128,11 +122,13 @@ public class EnemyAI : MonoBehaviour
     public void SetStun(float time = 0)
     {
         currentState = State.Stun;
- 
-        time = time == 0 ? stunTime : time;
+        if (time == 0)
+            time = stunTime;
 
-        // ì—¬ê¸°ì— ìŠ¤í„´ ì—ë‹ˆë©”ì´ì…˜
+        if(_status != null)
+            _status.PlayStun(time);
 
+        //¿©±â¿¡ ½ºÅÏ ¾Ö´Ï¸ŞÀÌ¼Ç »ç¿ë
         StartCoroutine(Recover(time));
     }
 
@@ -146,13 +142,8 @@ public class EnemyAI : MonoBehaviour
     public void SetDead()
     {
         currentState = State.Dead;
-        // ê³µê²© ì¤‘ì§€ ì½”ë“œ
-
-        if(attack != null)
-        {
+        if (attack != null)
             attack.isAttack = false;
-        }
-
         move.Stop();
     }
 }

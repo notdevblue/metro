@@ -16,7 +16,7 @@ TagManager:
   - PLAYER
   - ENEMY
   - ETCITEM
-  - 
+  - WALL
   - 
   - 
   - 
@@ -49,4 +49,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 2450150293
+    locked: 0
+  - name: ETC
+    uniqueID: 608913223
     locked: 0

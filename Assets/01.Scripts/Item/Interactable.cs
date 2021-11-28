@@ -2,26 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-abstract public class Interactable : MonoBehaviour, IUseAble
+public abstract class Interactable : MonoBehaviour, IUseAble
 {
-    const string PLAYER = "Player";
     public string useText;
 
-    abstract public void Use(GameObject target);
+    public abstract void Use(GameObject target);
 
-    private void OnTriggerEnter2D(Collider2D other)
+    protected bool _used = false;
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(other.transform.CompareTag(PLAYER))
+        if (_used) return;
+        if(collision.gameObject.CompareTag("Player"))
         {
+            //UIManager를 통해서 툴팁 텍스트를 보여주도록하고
             UIManager.ShowToolTip(useText);
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (other.transform.CompareTag(PLAYER))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            UIManager.CloseToolTip();
+            //UIManager를 통해서 툴팁 텍스트를 사라지도록 한다
+            UIManager.CloseTooltip();
         }
     }
 }
