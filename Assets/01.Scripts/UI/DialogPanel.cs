@@ -47,6 +47,9 @@ public class DialogPanel : MonoBehaviour
         currentIndex = 0;
         GameManager.TimeScale = 0f;
 
+        profileImage.sprite = null;
+        dialogText.text = "";
+
         panel.DOScale(new Vector3(1, 1, 1), 0.8f).OnComplete(() =>
         {
             TypeIt(list[currentIndex]);

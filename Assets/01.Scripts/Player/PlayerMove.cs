@@ -33,6 +33,9 @@ public class PlayerMove : MonoBehaviour
     private bool isDash = false; //현재 대시중인가?
     private bool isHit = false;//피격중인가?
 
+    [Header("무빙")]
+    public bool facingRight;
+
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -126,13 +129,9 @@ public class PlayerMove : MonoBehaviour
         if(isDash || isHit) return; //대시중에는 기본 연산은 하지 않는다.
 
         float xMove = input.xMove;
-        if (xMove > 0)
+        if (xMove > 0 && !facingRight || xMove < 0 && facingRight) // && > ||
         {
-            spriteRenderer.flipX = false;
-        }
-        else if (xMove < 0)
-        {
-            spriteRenderer.flipX = true;
+            Flip();
         }
 
         isGround = Physics2D.OverlapCircle(
@@ -156,5 +155,18 @@ public class PlayerMove : MonoBehaviour
         }
 
         rigid.velocity = new Vector2(xMove * moveSpeed, rigid.velocity.y);
+    }
+
+    public Vector2 GetFront()
+    {
+        return transform.localScale.x > 0 ? transform.right : -transform.right;
+    }
+
+    public void Flip()
+    {
+        facingRight = !facingRight;
+        Vector3 localScale = transform.localScale;
+        localScale.x *= -1;
+        transform.localScale = localScale;
     }
 }
