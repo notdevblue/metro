@@ -66,6 +66,7 @@
      <Compile Include="Assets/01.Scripts/Core/SceneChanger.cs" />
      <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_TextSelector_A.cs" />
      <Compile Include="Assets/01.Scripts/Enemy/Boss/GoblinBossAttack.cs" />
+     <Compile Include="Assets/01.Scripts/Core/Define.cs" />
      <Compile Include="Assets/01.Scripts/Enemy/EnemyMove.cs" />
      <Compile Include="Assets/01.Scripts/Player/PlayerInput.cs" />
      <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark03.cs" />
@@ -123,7 +124,7 @@
      <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_TextEventCheck.cs" />
      <Compile Include="Assets/01.Scripts/SlimeAnimation.cs" />
      <Compile Include="Assets/01.Scripts/Enemy/Boss/BossHPBar.cs" />
-     <Compile Include="Assets/01.Scripts/Core/Define.cs" />
+     <Compile Include="Assets/01.Scripts/ETC/ScrollBG.cs" />
      <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_Bitmap.shader" />
@@ -376,6 +377,12 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
         <HintPath>/home/han/Documents/Unity/Metro/Library/PackageCache/com.unity.nuget.newtonsoft-json@2.0.0/Runtime/Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+        <HintPath>/home/han/Unity/Hub/Editor/2020.3.23f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+        <HintPath>/home/han/Unity/Hub/Editor/2020.3.23f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
         <HintPath>/home/han/Unity/Hub/Editor/2020.3.23f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
